@@ -17,7 +17,7 @@ export const LoginForm: FC<OTPLoginFormProps> = ({
     const [showOTPInput, setShowOTPInput] = useState(false);
     const [otp, setOTP] = useState('');
     const [emailError, setEmailError] = useState('');
-    const [googleError, setGoogleError] = useState('');
+    const [googleError] = useState('');
 
     const validateEmail = (email: string) => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;

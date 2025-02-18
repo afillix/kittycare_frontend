@@ -21,13 +21,13 @@ export const useGoogleAuth = () => {
 
             const subscriptionId = localStorage.getItem("subscriptionId");
             if (!subscriptionId || subscriptionId === "undefined") {
-                navigate(`/progress`);
+                navigate(`/test-profile`);
                 return;
             }
 
             const catId = localStorage.getItem("catId");
             if (!catId || catId === "undefined") {
-                navigate('/progress');
+                navigate(`/test-profile`);
                 return;
             }
 

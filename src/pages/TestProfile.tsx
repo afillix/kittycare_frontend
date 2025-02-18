@@ -39,6 +39,17 @@ const TestProfile = () => {
                     </p>
                 </div>
 
+                <button
+                    onClick={() => navigate('/progress')}
+                    className="w-fit px-4 h-[55px] mt-6 text-base sm:text-xl
+                                 bg-blue-600 text-white rounded-2xl
+                                 hover:bg-blue-700 active:bg-blue-800
+                                 disabled:bg-blue-400 disabled:cursor-not-allowed
+                                 transition-colors duration-200"
+                >
+                    Continue to progress
+                </button>
+
 
                 <button
                     onClick={handleLogout}

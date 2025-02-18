@@ -7,6 +7,13 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Setup Guide
+1. Run npm install
+2. Run this command to create .env file: **cp .env.example .env**
+3. Set url in VITE_BASE_API_URL (.env file)
+4. Change VITE_GOOGLE_CLIENT_ID in .env
+5. Run npm run dev
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
