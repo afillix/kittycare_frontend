@@ -2,14 +2,12 @@ import { CatFormData } from '../types/cat.types';
 import { AuthToken } from './types';
 
 export const setAuthToken = (authData: AuthToken) => {
-  console.log("setAuthToken", authData);
 
   localStorage.setItem('email', authData.email);
   localStorage.setItem('token', authData.token);
-  // Convert seconds to milliseconds by multiplying by 1000
   const expiresAt = new Date().getTime() + (parseInt(authData.expiresIn) * 1000);
   localStorage.setItem('expiresAt', expiresAt.toString());
-  if(authData.photo)  localStorage.setItem('photo', authData.photo);
+  if (authData.photo) localStorage.setItem('photo', authData.photo);
 };
 
 export const clearTokens = () => {
@@ -57,17 +55,16 @@ export const clearTokens = () => {
 export const isAuthenticated = (): null | any => {
   const token = localStorage.getItem('token');
   const expiresAt = localStorage.getItem('expiresAt');
-  
   if (!token || !expiresAt) return null;
-  
+
   const isValid = new Date().getTime() < parseInt(expiresAt);
-  if(!isValid) return null;
-  
+  if (!isValid) return null;
+
   try {
     // Get user info from token
     const payload = token.split('.')[1];
     const user = JSON.parse(atob(payload));
-    
+
     return user;
   } catch (error) {
     console.error('Error decoding token:', error);
@@ -79,7 +76,7 @@ export const isAuthenticated = (): null | any => {
 // const parseExpirationTime = (expiresIn: string): number => {
 //   const unit = expiresIn.slice(-1);
 //   const value = parseInt(expiresIn.slice(0, -1));
-  
+
 //   switch (unit) {
 //     case 'd': return value * 24 * 60 * 60 * 1000;
 //     case 'h': return value * 60 * 60 * 1000;

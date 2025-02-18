@@ -12,6 +12,7 @@ import PriceSelection from "./pages/PriceSelection.tsx";
 import Profile from "./pages/Profile.tsx";
 import EmailSentSuccess from "./pages/EmailSentSuccess.tsx";
 import SignUpConfirm from "./pages/SignUpConfirm.tsx";
+import TestProfile from "./pages/TestProfile";
 
 import PageHead from './components/PageHead';
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
@@ -32,6 +33,7 @@ const ROUTES = {
   PROGRESS: '/progress',
   CAT_ASSISTANT: '/cat-assistant',
   CAT_PROFILE: '/cat-profile',
+  TEST_PROFILE: '/test-profile',
   NOT_FOUND: '/*',
 };
 
@@ -76,6 +78,7 @@ const AppContent = () => {
     { path: ROUTES.PRICE_SELECTION, element: <ProtectedRouteWrapper><PriceSelection /></ProtectedRouteWrapper> },
     { path: ROUTES.CAT_ASSISTANT, element: <ProtectedRouteWrapper><Chatroom /></ProtectedRouteWrapper> },
     { path: ROUTES.CAT_PROFILE, element: <ProtectedRouteWrapper><Profile /></ProtectedRouteWrapper> },
+    { path: ROUTES.TEST_PROFILE, element: <ProtectedRouteWrapper><TestProfile /></ProtectedRouteWrapper> },
     { path: ROUTES.NOT_FOUND, element: <ProtectedRouteWrapper><div>Not found</div></ProtectedRouteWrapper> },
   ];
 

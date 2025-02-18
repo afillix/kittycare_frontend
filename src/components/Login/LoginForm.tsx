@@ -2,6 +2,9 @@ import { FC, useState } from 'react';
 import TextInput from './Input';
 import { OTPLoginFormProps } from './types';
 import { OTPForm } from '../shared/OTPForm';
+import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleAuth } from '../../hooks/useGoogleAuth';
+
 
 export const LoginForm: FC<OTPLoginFormProps> = ({
     error,
@@ -9,10 +12,12 @@ export const LoginForm: FC<OTPLoginFormProps> = ({
     handleEmailSubmit,
     handleOTPSubmit,
 }) => {
+    const { handleGoogleLogin } = useGoogleAuth();
     const [email, setEmail] = useState('');
     const [showOTPInput, setShowOTPInput] = useState(false);
     const [otp, setOTP] = useState('');
     const [emailError, setEmailError] = useState('');
+    const [googleError, setGoogleError] = useState('');
 
     const validateEmail = (email: string) => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
@@ -69,6 +74,13 @@ export const LoginForm: FC<OTPLoginFormProps> = ({
                     noValidate
                     aria-label="Email verification form"
                 >
+
+                    {googleError && (
+                        <div className="text-red-500 text-sm text-center mb-4">
+                            {googleError}
+                        </div>
+                    )}
+
                     <TextInput
                         name="email"
                         label="Email"
@@ -114,6 +126,24 @@ export const LoginForm: FC<OTPLoginFormProps> = ({
                     handleEmailSubmit={handleEmailSubmit}
                 />
             )}
+            <div className="flex items-center justify-center my-4">
+                <div className="flex-grow border-t border-black"></div>
+                <div className="mx-4">
+                    <GoogleLogin
+                        type="icon"
+                        theme="filled_black"
+                        size="large"
+                        shape="circle"
+                        onSuccess={(credentialResponse) => {
+                            handleGoogleLogin(credentialResponse.credential || '');
+                        }}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                    />
+                </div>
+                <div className="flex-grow border-t border-black"></div>
+            </div>
         </div>
     );
 };

@@ -43,6 +43,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // Redirect to login if not authenticated
   if (!isAuthenticated()) {
+    console.log("Not authenticated, redirecting to", redirectPath);
     return <Navigate to={redirectPath} replace state={{ from: location }} />;
   }
 

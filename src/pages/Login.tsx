@@ -6,10 +6,11 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '../Redux/hooks';
 import ReactPixel from 'react-facebook-pixel';
 import { useNavigate } from 'react-router-dom';
-import { signInWithOTPAPI } from '../services/api';
+import { signInWithOTPAPI, loginWithGoogleAPI } from '../services/api';
 import { loginUserWithOTPAsync } from '../Redux/features/userSlice';
 import { useRive, UseRiveParameters } from '@rive-app/react-canvas';
 import styles from '../components/LoadingOverlay/LoadingOverlay.module.css';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 interface LoginError {
   email?: string;
@@ -21,6 +22,8 @@ const RIVE_ANIMATION_CONFIG: UseRiveParameters = {
   src: 'riv/V2/Pulse_kitty.riv',
   autoplay: true,
 };
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -96,32 +99,68 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleGoogleLogin = async (accessToken: string) => {
+    setError({});
+    setIsLoading(true);
+
+    try {
+      const response = await loginWithGoogleAPI(accessToken);
+
+      localStorage.setItem('token', response.token);
+
+      localStorage.setItem('user', JSON.stringify(response.user));
+
+      const subscriptionId = localStorage.getItem("subscriptionId");
+      if (!subscriptionId || subscriptionId === "undefined") {
+        navigate(`/progress?${urlParams.toString()}`);
+        return;
+      }
+
+      const catId = localStorage.getItem("catId");
+      if (!catId || catId === "undefined") {
+        navigate('/progress');
+        return;
+      }
+
+      navigate('/cat-assistant');
+    } catch (err: any) {
+      setError({
+        general: err.message || 'Failed to login with Google'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const { RiveComponent } = useRive(RIVE_ANIMATION_CONFIG);
   const isPhone = window.innerWidth < 768;
 
   return (
-    <Layout>
-      <div className={`m-auto sm:w-[600px] max-w-[90%] px-[21px] sm:px-[80px] bg-white border-2 rounded-3xl border-[#B8B8B8] mt-8 ${isPhone ? 'py-[47px] sm:py-[70px] ' : 'pb-[47px] sm:pb-[70px]'}`}>
-        {!isPhone && <div className={`${styles.animationContainer} mx-auto h-[200px]`}>
-          {RiveComponent && <RiveComponent />}
-        </div>}
-        <div className="w-full h-full flex flex-col items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-[28px] sm:text-[40px] font-semibold pb-4">
-              Login
-            </h2>
-            <p className='font-semibold text-gray-500 text-md md:text-xl'>Haven't made an account yet? <span className='text-blue-600 cursor-pointer' onClick={() => navigate('/progress')}>Sign Up now.</span></p>
-          </div>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <Layout>
+        <div className={`m-auto sm:w-[600px] max-w-[90%] px-[21px] sm:px-[80px] bg-white border-2 rounded-3xl border-[#B8B8B8] mt-8 ${isPhone ? 'py-[47px] sm:py-[70px] ' : 'pb-[47px] sm:pb-[70px]'}`}>
+          {!isPhone && <div className={`${styles.animationContainer} mx-auto h-[200px]`}>
+            {RiveComponent && <RiveComponent />}
+          </div>}
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="text-center">
+              <h2 className="text-[28px] sm:text-[40px] font-semibold pb-4">
+                Login
+              </h2>
+              <p className='font-semibold text-gray-500 text-md md:text-xl'>Haven't made an account yet? <span className='text-blue-600 cursor-pointer' onClick={() => navigate('/progress')}>Sign Up now.</span></p>
+            </div>
 
-          <LoginForm
-            error={error}
-            isLoading={isLoading}
-            handleEmailSubmit={handleEmailSubmit}
-            handleOTPSubmit={handleOTPSubmit}
-          />
+            <LoginForm
+              error={error}
+              isLoading={isLoading}
+              handleEmailSubmit={handleEmailSubmit}
+              handleOTPSubmit={handleOTPSubmit}
+              handleGoogleLogin={handleGoogleLogin}
+            />
+          </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </GoogleOAuthProvider>
   );
 };
 

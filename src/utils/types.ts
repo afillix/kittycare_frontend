@@ -130,3 +130,15 @@ export interface Goal {
   title: string;
   description: string;
 }
+
+export interface GoogleAuthResponse {
+  token: string;
+  user: {
+    email: string;
+    name: string;
+    picture: string;
+  };
+  session?: {
+    expires_in: string;
+  };
+}

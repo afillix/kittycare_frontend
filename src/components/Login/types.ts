@@ -6,5 +6,6 @@ export interface OTPLoginFormProps {
     };
     isLoading: boolean;
     handleEmailSubmit: (email: string) => Promise<boolean>;
-    handleOTPSubmit: (email: string, otp: string) => void;
+    handleOTPSubmit: (email: string, token: string) => Promise<void>;
+    handleGoogleLogin: (accessToken: string) => Promise<void>;
 } 

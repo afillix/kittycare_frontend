@@ -343,7 +343,7 @@ export const deleteStripeSubscriptionAPI = async (subscriptionId: string) => {
       throw new Error("User Not Authenticated");
     }
     console.log('34343434343434343434');
-    
+
     const response = await API.delete(`/api/payments/stripe/subscription/${subscriptionId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -561,6 +561,15 @@ export const signUpWithOTPAPI = async (userData: SignupState) => {
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to sign up with OTP');
+  }
+};
+
+export const loginWithGoogleAPI = async (credential: string) => {
+  try {
+    const response = await API.post('/api/supabase/google-auth', { credential });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to authenticate with Google');
   }
 };
 
